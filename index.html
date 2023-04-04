@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>제주어 번역기</title>
+        <meta charset="utf-8">
+        <meta name="viewport"  content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script>
+         "use strict";
+         function submitForm(oFormElement) {
+             var xhr = new XMLHttpRequest();
+             xhr.onload = function() {
+                var result = document.getElementById('result');
+                result.innerHTML = xhr.responseText;
+             }
+             xhr.open (oFormElement.method, oFormElement.action, true);
+             var review = document.getElementById('review');
+             xhr.send (review.value);
+             return false;
+         }
+        </script>
+
+    </head>
+    <body>
+
+        <div class="container">
+            <h1>제주어 번역기</h1>
+            <p>제주어로 텍스트를 주시면 한국어로 번역해드립니다.</p>
+
+
+            <form method="POST"
+                  action="https://2xi1yb708i.execute-api.us-west-2.amazonaws.com/default/Seq2Seq-Translation-Korean-Jejueo"
+                  onsubmit="return submitForm(this);" >                     <!-- HERE IS WHERE YOU NEED TO ENTER THE API URL -->
+                <div class="form-group">
+                    <label for="review">여기에 텍스트를 적어 주십시오:</label>
+                    <textarea class="form-control"  rows="5" id="review">아까 그 나무는 뭐꽈? 게민 봄에는 반찬 뭐 헹 먹어. 시작헐 때 오리양 기서놩.</textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <h1 class="bg-success" id="result"></h1>
+        </div>
+    </body>
+</html>
