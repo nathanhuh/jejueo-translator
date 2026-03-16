@@ -1,0 +1,234 @@
+:root {
+  --bg-main: #e9efd8;
+  --bg-main-deep: #dde8cb;
+  --bg-side: #e4ebd8;
+  --text-dark: #171714;
+  --heading: #7a5b2a;
+  --panel: #2f2f31;
+  --panel-outline: #262629;
+  --chip: #2c2b29;
+  --chip-text: #ebe5d5;
+  --send: #ba9a58;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  color: var(--text-dark);
+  background:
+    radial-gradient(circle at 15% 16%, #f3f8e6 0%, rgba(243, 248, 230, 0.7) 32%, transparent 53%),
+    radial-gradient(circle at 94% 9%, #d9e6c5 0%, rgba(217, 230, 197, 0.35) 28%, transparent 52%),
+    linear-gradient(180deg, var(--bg-main) 0%, var(--bg-main-deep) 100%);
+}
+
+.page {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  padding: 14px 14px 26px 18px;
+  background: rgba(231, 239, 221, 0.95);
+  border-right: 1px solid rgba(95, 105, 84, 0.08);
+}
+
+.brand-wrap {
+  margin-bottom: 22px;
+}
+
+.brand {
+  margin: 0;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-weight: 500;
+  line-height: 0.94;
+  letter-spacing: -0.01em;
+  font-size: clamp(16px, 2.2vw, 46px);
+}
+
+.totem {
+  width: 28px;
+  margin-top: 8px;
+  display: block;
+}
+
+.totem rect,
+.totem circle {
+  fill: #191915;
+}
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.content {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 16px 18px;
+}
+
+.topbar {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #171714;
+  display: grid;
+  place-items: center;
+}
+
+.icon svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 37%, #1f1f1f 0 16%, transparent 16%),
+    radial-gradient(circle at 50% 72%, #1f1f1f 0 26%, transparent 26%),
+    #f3f4ec;
+  border: 1.4px solid #1f1f1f;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 18px;
+  padding-bottom: 38px;
+}
+
+.hero h2 {
+  margin: 0;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-weight: 500;
+  font-size: clamp(28px, 4.7vw, 58px);
+  color: var(--heading);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero p {
+  margin: 0 0 6px;
+  font-size: clamp(13px, 1.86vw, 39px);
+}
+
+.prompt {
+  width: min(72vw, 540px);
+  min-height: 62px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #313133 0%, var(--panel) 100%);
+  border: 1px solid var(--panel-outline);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  padding: 14px 12px 14px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.prompt span {
+  color: #d0b371;
+  font-size: 12px;
+}
+
+.send {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 0;
+  color: #1d1b17;
+  background: var(--send);
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.chips {
+  width: min(72vw, 540px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding-top: 8px;
+}
+
+.chip-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.chips button {
+  border: 0;
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--chip-text);
+  font-size: 11px;
+  padding: 7px 10px;
+  line-height: 1;
+}
+
+.sparkle {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: clamp(14px, 2.3vw, 26px);
+}
+
+@media (max-width: 860px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    padding-bottom: 14px;
+    border-right: none;
+    border-bottom: 1px solid rgba(95, 105, 84, 0.08);
+  }
+
+  .menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+  }
+
+  .content {
+    min-height: 70vh;
+  }
+}
