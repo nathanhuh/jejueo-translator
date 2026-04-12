@@ -24,7 +24,7 @@ Project posture: portfolio/research demo first.
 
 - Planned base model: `est-ai/alan-llm-jeju-dialect-v1-4b`
 - Planned license expectation to verify: `Apache-2.0`
-- Planned launch artifact: existing GGUF quant (`Q4_K_M` or `Q5_K_M`) selected by benchmark
+- Planned launch artifact: existing GGUF quant `Q4_K_M` as the provisional MVP default
 
 These notes are planning assumptions until the exact source documents are reviewed and recorded.
 

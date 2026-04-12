@@ -2,9 +2,11 @@
 
 ## Collaboration Protocol
 
-- The user is the primary implementer for this project.
-- Do not create or modify implementation/source code unless the user explicitly authorizes coding in that turn.
-- Before generating any code changes, ask for explicit permission.
+- Work in hands-off mode by default.
+- Implement directly unless the user needs to make a product or architecture decision with non-obvious consequences.
+- Only require user intervention when a real decision or external action is needed.
+- Plans and tickets should still include core implementation tasks normally.
+- Assistant execution should still value testing, validation, tooling, review, and documentation alongside implementation work.
 - Planning documents, checklists, decision records, and review feedback may be updated without additional approval.
 
 ## Planning Baseline
@@ -23,4 +25,5 @@
 
 ## Intent
 
-This repo is used for learning and portfolio development. Prioritize guidance, planning, and code review over autonomous coding.
+This repo is used for learning and portfolio development. Keep explanations clear and implementation pragmatic.
+Default division of labor: assistant can implement directly in hands-off mode while keeping the user involved only for meaningful decisions, external dependencies, or validation that requires their judgment.

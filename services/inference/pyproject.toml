@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jejueo-inference"
+version = "0.1.0"
+description = "Inference service for the Jejueo translator MVP"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.12.0"]
+
+[project.optional-dependencies]
+llama = ["llama-cpp-python>=0.2.90"]
+server = ["fastapi>=0.116.0", "uvicorn>=0.35.0", "modal>=1.0.0"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -7,12 +7,27 @@ Build a public web app for Korean <-> Jejueo translation with low-latency infere
 ## Stack
 
 - Model: `est-ai/alan-llm-jeju-dialect-v1-4b`
-- Quant for launch: benchmark existing GGUF `Q4_K_M` vs `Q5_K_M`
-- Inference runtime: `llama-cpp-python` on `llama.cpp`
+- Quant for launch: provisional `Q4_K_M`
+- Inference runtime target: `llama-cpp-python` on `llama.cpp`
 - Inference hosting: Modal
 - Web frontend: Cloudflare Pages
 - Edge API: Cloudflare Pages Functions
 - Abuse controls: Cloudflare Turnstile + Cloudflare Rate Limiting
+
+## Local Validation Note
+
+- The currently verified local evaluation path uses `llama-completion` with `--device none`.
+- Metal-backed local offload was not the verified smoke-test path on this machine.
+
+## Current Implementation Status
+
+- `packages/shared` exists and provides the shared contract, prompt builder, and validation helpers.
+- `services/inference` now provides tested ASGI/FastAPI/Modal entry scaffolding for `/health` and `/translate`.
+- The inference service now resolves its model path from either `MODEL_PATH` or a Modal Volume mount + filename.
+- Edge and inference now share a forwarded request ID and emit structured logs without raw text by default.
+- `apps/web` now provides a tested Cloudflare Pages Function proxy and a richer static UI shell.
+- The static shell is the intended MVP frontend for now; any React/TypeScript rewrite is deferred until after stable deployment.
+- Remaining platform work is live dependency verification, Cloudflare rate limiting, and optional Turnstile widget wiring.
 
 ## Design Principles
 
@@ -25,8 +40,9 @@ Build a public web app for Korean <-> Jejueo translation with low-latency infere
 ## High-Level Components
 
 1. `apps/web`
-- React + TypeScript + Tailwind UI.
+- Static HTML/CSS/JS shell for MVP on Cloudflare Pages.
 - Source/target toggle, input/output panes, examples, copy, clear, and error states.
+- React/TypeScript is explicitly deferred until after the deployed MVP proves stable.
 
 2. `Pages Function /api/translate`
 - Validates request body.
@@ -39,10 +55,11 @@ Build a public web app for Korean <-> Jejueo translation with low-latency infere
 - Thin Python service on Modal.
 - Loads the chosen GGUF from a Modal Volume.
 - Exposes `/health` and `/translate`.
+- Current repo status: the service layer, FastAPI/Modal entry scaffolding, and structured logging are implemented locally; live dependency verification is still pending.
 
 4. `packages/eval`
-- Offline benchmark harness.
-- Quant comparison and regression checks.
+- Offline evaluation harness.
+- Local `Q4_K_M` validation now; formal later quant comparison if warranted.
 
 ## Request Flow
 
