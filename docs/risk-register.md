@@ -20,7 +20,7 @@
 | R-07 | Legal | Model/data licensing ambiguity blocks public release | 3 | 5 | 15 | No written license chain for model and data | Complete license checklist before launch; keep repo free of raw data | Nathan | Open |
 | R-08 | Process | Scope creep delays launch | 4 | 3 | 12 | New features added before v1 is live | Enforce translation-only scope until launch checklist is complete | Nathan | Open |
 | R-09 | Release | MVP implementation is not yet the clean canonical repo state | 4 | 4 | 16 | Beta prep still depends on large untracked implementation surfaces or repo drift | Land the monorepo implementation and keep `apps/web` as the single frontend path | Nathan | Open |
-| R-10 | Release | Missing CI and reproducible setup lets regressions slip through before beta | 4 | 4 | 16 | A clean machine cannot run the documented verification path or PRs merge without automated checks | Add reproducible setup instructions and CI for Python + Node verification | Nathan | Open |
+| R-10 | Release | Missing CI and reproducible setup lets regressions slip through before beta | 2 | 3 | 6 | A clean machine still cannot run the documented verification path or CI is not protecting the core test surfaces | Keep the documented setup flow current and keep GitHub Actions enforcing Python + Node verification | Nathan | Mitigated |
 
 ## Critical Blocker Categories
 

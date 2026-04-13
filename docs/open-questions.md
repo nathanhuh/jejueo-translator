@@ -7,7 +7,7 @@ This document tracks the few remaining decisions that still matter after the v1 
 - `packages/shared` now exists and matches the frozen public API contract.
 - `services/inference` now has tested ASGI/FastAPI/Modal scaffolding, request tracing, and structured logs for `/health` and `/translate`.
 - `apps/web` now exists with a tested Pages Function proxy and a static MVP shell, and it is now the sole intended frontend surface for beta.
-- The remaining gaps are repo landing/cleanup, deployment verification, Cloudflare protections, evaluation evidence, and launch-side licensing/attribution work.
+- The remaining gaps are deployment verification, Cloudflare protections, evaluation evidence, and launch-side licensing/attribution work.
 
 ## Decisions Already Locked
 
@@ -33,10 +33,6 @@ This document tracks the few remaining decisions that still matter after the v1 
 1. Demo posture for cold starts
 - Decide when to accept scale-to-zero cold starts and when to temporarily use `min_containers=1`.
 
-2. CI baseline for beta
-- Decide the minimum required automated gate for beta:
-  Python tests only when dependencies are present, or mandatory Python + Node verification on every change.
-
 ## Questions to Resolve Through Documentation, Not Guesswork
 
 1. Model/data licensing details for the public demo
@@ -60,6 +56,10 @@ This document tracks the few remaining decisions that still matter after the v1 
 - Decision: `apps/web` is the only intended frontend surface for beta.
 - Decision: the older root/mock frontend artifacts have been removed from the repo.
 
-5. Launch quant posture
+5. CI baseline for beta
+- Decision: the repo runs mandatory Python and Node verification in GitHub Actions for the checked-in core test paths.
+- Decision: the documented clean-checkout setup flow uses the root `requirements-dev.txt` plus the native Node test runner.
+
+6. Launch quant posture
 - Decision: v1 launches on `Q4_K_M` as the provisional default quant.
 - Decision: `Q5_K_M` can replace it later only if the fixed evaluation workflow shows materially better translation quality.

@@ -146,11 +146,11 @@ Acceptance criteria:
 
 ## 9) Repo Hygiene And Release Engineering
 
-- [ ] Land `apps/web`, `services/inference`, `packages/shared`, and `packages/eval` as the canonical tracked repo state
+- [x] Land `apps/web`, `services/inference`, `packages/shared`, and `packages/eval` as the canonical tracked repo state
 - [x] Retire or archive legacy frontend surfaces outside `apps/web`
-- [ ] Make the documented Python verification path runnable from a clean environment
-- [ ] Add CI coverage for the Python and Node test paths
-- [ ] Record one reproducible beta-validation workflow in docs
+- [x] Make the documented Python verification path runnable from a clean environment
+- [x] Add CI coverage for the Python and Node test paths
+- [x] Record one reproducible beta-validation workflow in docs
 
 Acceptance criteria:
 
@@ -158,9 +158,14 @@ Acceptance criteria:
 - The intended MVP app lives in one canonical frontend path
 - CI fails when the core proxy or inference contract regresses
 
+Current note:
+
+- The repo now includes `requirements-dev.txt` plus a GitHub Actions workflow for the Python and web test paths.
+- A local `.venv` install succeeded and the documented Python test command passed.
+
 ## Return-To-Review Notes (Fill before coming back)
 
 - Quant chosen: `Q4_K_M` (provisional MVP default)
 - File structure summary: `packages/shared`, `services/inference`, and `apps/web` now exist; the web app is currently a richer static shell plus Pages Function proxy scaffold.
 - What deviated from `api-spec.md` (if anything): the current inference skeleton also uses an internal `401 unauthorized` response for missing/invalid upstream auth.
-- Top 5 blockers: landing the real repo state, dependency-backed `llama-cpp-python` service verification, CI/reproducible setup, Cloudflare protections, and deployment-side eval/latency proof.
+- Top 4 blockers: dependency-backed `llama-cpp-python` service verification, Cloudflare protections, deployment-side eval/latency proof, and launch licensing/attribution signoff.

@@ -1,0 +1,4 @@
+-e packages/shared
+-e services/inference
+-e packages/eval
+pytest>=8.4.0

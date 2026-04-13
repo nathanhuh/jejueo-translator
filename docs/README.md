@@ -32,5 +32,6 @@ Current operating posture: ship a narrow, production-style portfolio demo first,
 - `services/inference` now contains tested ASGI/FastAPI/Modal entry scaffolding, env-based model-volume path resolution, and structured request logging with forwarded request IDs.
 - `apps/web` now contains a tested Pages Function proxy scaffold and a richer static UI shell for manual checks.
 - `apps/web` is now the single intended frontend surface for beta; older root/mock frontend artifacts have been removed.
+- The repo now includes a root Python dev dependency file plus CI for the shared/inference Python tests and the web test path.
 - The static shell is the intended MVP frontend for now; any React/TypeScript rewrite is deferred until after stable deployment.
 - Remaining deployment-specific work is live dependency verification, Cloudflare rate limiting, and optional Turnstile widget wiring.

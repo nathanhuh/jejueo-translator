@@ -16,7 +16,8 @@ The current MVP stack is:
 
 - Real MVP implementation now exists locally in `apps/web`, `services/inference`, `packages/shared`, and `packages/eval`.
 - The web layer is the most verified path today: the Pages Function proxy and config endpoint tests pass locally.
-- The Python paths are implemented and source-reviewed, but full local verification still depends on installing the repo's Python test/runtime dependencies.
+- The repo now has a root Python dev dependency file and CI coverage for the core Python and web verification paths.
+- The documented clean-checkout Python verification path now runs successfully through a local `.venv`.
 - `services/inference` has ASGI, FastAPI, and Modal entry scaffolding with structured request logging and forwarded request IDs.
 - `services/inference` includes `.env.example` plus a deploy smoke-check script for the live Modal endpoint.
 - `apps/web` has a tested Pages Function proxy, a static HTML/CSS/JS shell for MVP, and checked-in Pages config plus Turnstile client wiring.
@@ -36,8 +37,6 @@ What works:
 
 What is still missing before a beta deployment:
 
-- commit and land the MVP monorepo implementation as the canonical repo state
-- install and verify the Python test/runtime dependencies locally and in CI
 - prove real Modal inference with the GGUF model, Volume mount, and auth boundary
 - deploy Cloudflare Pages with real bindings, Turnstile, and rate limiting
 - produce real benchmark and latency evidence for the chosen launch build
@@ -53,19 +52,34 @@ packages/eval            Local eval tooling and fixed eval set
 docs                     Planning, architecture, evaluation, and test docs
 ```
 
+## Local Setup
+
+Python tooling:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements-dev.txt
+```
+
+Node requirement:
+
+- Node `22+` for the checked-in web test path in `apps/web`
+
 ## Local Verification
 
 Python tests:
 
 ```bash
-PYTHONPATH='packages/shared/src:services/inference/src' pytest packages/shared/tests services/inference/tests
+python3 -m pytest packages/shared/tests services/inference/tests
 ```
 
 Web tests:
 
 ```bash
 cd apps/web
-node --test tests/translate.test.js
+node --test tests/config.test.js tests/translate.test.js
 ```
 
 Deployment prep:
@@ -88,5 +102,5 @@ cp services/inference/.env.example services/inference/.env
 
 - The currently verified local eval path uses `llama-completion --device none`.
 - Deployment-specific latency numbers are still pending live Modal/Cloudflare verification.
-- The checked-in docs describe the intended MVP architecture accurately, but the project is not beta-ready until the deployment, CI, evaluation, and licensing blockers above are closed.
+- The checked-in docs describe the intended MVP architecture accurately, but the project is not beta-ready until the deployment, evaluation, and licensing blockers above are closed.
 - Raw training corpora should stay out of the public repo.
