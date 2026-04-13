@@ -33,18 +33,17 @@ Still blocked on external systems:
 These are not Cloudflare or Modal setup tasks, but they still block a credible
 beta release:
 
-- the MVP implementation currently exists in the workspace more than in the
-  tracked `main` branch history, so the repo state still needs to be landed and
-  cleaned up
-- the Python verification path is not reproducible from a clean environment yet;
-  this machine could not run the documented pytest command without installing
-  dependencies first
-- no CI workflow currently enforces the Python or Node test paths
 - the repo has eval tooling and a fixed eval set, but it still lacks checked-in
   benchmark evidence and real deployed latency numbers for launch signoff
 
 The old root/frontend prototype surfaces have been removed. `apps/web` is now
 the only intended frontend path for beta.
+
+The repo now includes:
+
+- a root `requirements-dev.txt` for the core Python test surface
+- a GitHub Actions workflow that runs the Python and Node verification paths
+- a documented clean-checkout setup flow in `README.md`
 
 Treat these as release blockers alongside the external platform setup items.
 
@@ -233,24 +232,22 @@ Main risks:
 
 ## Recommended Deployment Order
 
-1. Land the MVP repo state and retire legacy frontend surfaces
-2. Add reproducible setup plus CI coverage for Python and web tests
-3. Modal Volume + model upload
-4. Modal runtime verification
-5. Cloudflare Pages deployment with inference bindings
-6. Turnstile wiring
-7. Cloudflare rate limiting
-8. Final eval evidence, launch docs, and attribution
+1. Modal Volume + model upload
+2. Modal runtime verification
+3. Cloudflare Pages deployment with inference bindings
+4. Turnstile wiring
+5. Cloudflare rate limiting
+6. Final eval evidence, launch docs, and attribution
 
 ## Overall Estimate
 
 If the runtime behaves normally:
 
-- about `2-4 days` of focused work
+- about `1.5-3 days` of focused work
 
 If native/runtime or policy tuning issues appear:
 
-- about `4-7 days`
+- about `3-5 days`
 
 ## Suggested Definition Of Done For Deployment
 
@@ -260,8 +257,6 @@ If native/runtime or policy tuning issues appear:
 - Turnstile failures and rate-limited requests both return `429 rate_limited`
 - timeouts or upstream failures return `503 upstream_unavailable`
 - request tracing works through the same `requestId` at edge and inference
-- the repo has one canonical frontend surface and reproducible test commands
-- CI runs the core Python and web verification paths
 - benchmark and latency notes are updated with real values
 - deploy docs, README notes, and attribution are updated with real values
 
