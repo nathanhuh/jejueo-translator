@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jejueo-eval"
+version = "0.1.0"
+description = "Local evaluation tooling for the Jejueo translator MVP"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+llama = ["llama-cpp-python>=0.2.90"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -19,11 +19,26 @@ Non-goals for v1:
 ## Final Architecture Decision
 
 - Model: `est-ai/alan-llm-jeju-dialect-v1-4b`
-- Launch quantization: existing GGUF, benchmark `Q4_K_M` vs `Q5_K_M`
-- Inference engine: `llama-cpp-python` on `llama.cpp`
+- Launch quantization: existing GGUF `Q4_K_M` as the provisional MVP default
+- Inference engine target: `llama-cpp-python` on `llama.cpp`
 - Backend hosting: Modal
 - Frontend + edge API proxy: Cloudflare Pages + Pages Functions
 - Abuse protection: Cloudflare Turnstile + Cloudflare Rate Limiting
+
+Current local validation note:
+
+- The verified local smoke-test path uses `llama-completion` with `--device none`.
+- `llama-cpp-python` is still the intended service-side integration target.
+
+## Current Implementation Snapshot
+
+- Phase 0 is effectively complete except for launch-side legal and observability follow-through.
+- Phase 1 deliverables exist in `packages/eval`.
+- `packages/shared` now implements the frozen contract and validation layer.
+- `services/inference` now implements tested ASGI/FastAPI/Modal runtime scaffolding with shared request IDs, structured logs, upstream auth checks, `/health`, and `/translate`.
+- `apps/web` now implements a tested Pages Function proxy scaffold and a richer static UI shell.
+- The static shell is the intended MVP frontend for now; any React/TypeScript rewrite is deferred until after stable deployment.
+- Remaining deployment work is dependency-backed runtime verification, Cloudflare rate limiting, and optional Turnstile widget wiring.
 
 ## Success Criteria
 
@@ -71,33 +86,36 @@ Acceptance criteria:
 - one prompt template committed
 - one error taxonomy documented
 
-## Phase 1: Local Benchmarking and Quant Selection
+## Phase 1: Local Validation and Quant Posture
 
 Deliverables:
 
-- local benchmark script
+- local benchmark script or lightweight local test workflow
 - prompt template
 - evaluation set
-- quant choice memo
+- provisional quant note
 
 Tasks:
 
-- Benchmark existing GGUF `Q4_K_M` and `Q5_K_M`.
+- Start MVP with `Q4_K_M` as the provisional default quant.
 - Start from the model-card decoding baseline: `temperature=0.4`, `repetition_penalty=1.1`, optional `top_p=0.9`.
-- Build a small gold set covering both directions, proper nouns, line breaks, honorifics, and ambiguous dialect phrasing.
-- Score meaning preservation, dialect naturalness, format preservation, translation-only compliance, and hallucination rate.
+- Build the fixed evaluation set covering both directions, proper nouns, line breaks, honorifics, and ambiguous dialect phrasing.
+- Verify that `Q4_K_M` is usable for the MVP path on the local machine.
+- Use the working local path first, even if that means `llama-completion` CPU fallback during initial smoke testing.
+- Defer full `Q4_K_M` vs `Q5_K_M` comparison until after MVP if translation quality concerns appear or time permits.
 
 Acceptance criteria:
 
-- benchmark report checked into `docs/benchmarks.md`
-- chosen default quant recorded with reasons
+- `Q4_K_M` is recorded as the provisional launch quant in docs
+- local test workflow for the chosen quant is documented
 - prompt template fixed
 - v1 input cap set
+- one verified local smoke-test path exists for `Q4_K_M`
 
 Decision rule:
 
-- Choose `Q4_K_M` if quality is effectively tied and latency is materially better.
-- Choose `Q5_K_M` if it is noticeably better on the eval set.
+- Launch on `Q4_K_M` to minimize MVP scope and preserve latency headroom.
+- Promote `Q5_K_M` later only if the fixed evaluation workflow shows materially better meaning preservation or dialect quality.
 
 ## Phase 2: Inference Service on Modal
 
@@ -112,10 +130,15 @@ Deliverables:
 Tasks:
 
 - Build a thin Python translation service.
-- Load the GGUF via `llama-cpp-python`.
+- Load the GGUF via `llama-cpp-python` for the service runtime.
 - Keep the API translation-specific; do not expose generic chat completions.
 - Use a secret header so only the edge proxy can call the service.
 - Add Memory Snapshots after the service is stable.
+
+Current status:
+
+- The thin service layer and auth boundary are implemented locally.
+- The remaining work is deployable runtime integration rather than first-pass endpoint design.
 
 Acceptance criteria:
 
@@ -137,7 +160,7 @@ Deliverables:
 
 Tasks:
 
-- Build a minimal React + TypeScript + Tailwind SPA.
+- Build a minimal static frontend shell for MVP on Cloudflare Pages.
 - Pages Function validates the request, verifies Turnstile, applies rate limiting, forwards to Modal, and normalizes the response.
 - Ship source/target toggle, copy output, clear input, example phrases, line-break preservation, and clear `429`/`503` states.
 - Keep dev-only latency surfacing out of the public production UI.
@@ -193,6 +216,7 @@ Tasks:
 
 Do only after v1 is live:
 
+- run a formal `Q4_K_M` vs `Q5_K_M` comparison on the fixed evaluation set
 - reproduce quantization locally
 - benchmark prompt variants
 - add thumbs up/down feedback
@@ -202,10 +226,10 @@ Do only after v1 is live:
 ## Recommended Build Order
 
 1. API contract + eval set
-2. Local benchmark `Q4_K_M` vs `Q5_K_M`
+2. Validate local MVP path on `Q4_K_M`
 3. Modal inference service
 4. Cloudflare edge proxy
 5. Frontend UI
 6. Observability
 7. Launch docs
-8. Only then custom quantization and extra polish
+8. Only then `Q5_K_M` comparison, custom quantization, and extra polish

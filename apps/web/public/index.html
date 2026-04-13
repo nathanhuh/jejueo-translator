@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jejueo Translator</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <p class="eyebrow">Translation-only MVP</p>
+        <h1>Jejueo Translator</h1>
+        <p class="intro">
+          This deployment shell routes requests through the Cloudflare Pages Function proxy at
+          <code>/api/translate</code> and is ready for Turnstile-backed abuse protection once the
+          live keys are added.
+        </p>
+
+        <form id="translator-form" class="translator">
+          <div class="controls">
+            <label>
+              <span>Source</span>
+              <select id="source-lang" name="sourceLang">
+                <option value="ko">Korean</option>
+                <option value="ko-jeju">Jejueo</option>
+              </select>
+            </label>
+
+            <button id="swap-button" class="ghost" type="button">Swap</button>
+
+            <label>
+              <span>Target</span>
+              <select id="target-lang" name="targetLang">
+                <option value="ko-jeju">Jejueo</option>
+                <option value="ko">Korean</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="stack">
+            <span>Source text</span>
+            <textarea
+              id="source-text"
+              name="sourceText"
+              rows="8"
+              maxlength="500"
+              placeholder="대한민국은 사계절이 뚜렷합니다."
+            >대한민국은 사계절이 뚜렷합니다.</textarea>
+            <div class="field-meta">
+              <span>Preserves line breaks and enforces the v1 `500`-character cap.</span>
+              <strong id="char-count">24 / 500</strong>
+            </div>
+          </label>
+
+          <section class="examples" aria-label="Example phrases">
+            <div class="section-label">Examples</div>
+            <div class="example-grid">
+              <button
+                class="example-button"
+                type="button"
+                data-source-lang="ko"
+                data-target-lang="ko-jeju"
+                data-source-text="대한민국은 사계절이 뚜렷합니다."
+              >
+                Korean to Jejueo
+              </button>
+              <button
+                class="example-button"
+                type="button"
+                data-source-lang="ko-jeju"
+                data-target-lang="ko"
+                data-source-text="혼저 옵서. 오늘 바당 바람이 하영 붑니다."
+              >
+                Jejueo to Korean
+              </button>
+              <button
+                class="example-button"
+                type="button"
+                data-source-lang="ko"
+                data-target-lang="ko-jeju"
+                data-source-text="첫째 줄입니다.&#10;&#10;둘째 줄도 그대로 남아야 합니다."
+              >
+                Multi-line input
+              </button>
+            </div>
+          </section>
+
+          <section id="turnstile-block" class="turnstile-block" aria-live="polite" hidden>
+            <div class="section-label">Abuse protection</div>
+            <div id="turnstile-widget" class="turnstile-widget"></div>
+            <p id="turnstile-note" class="turnstile-note">
+              Security check will appear here when Turnstile is enabled.
+            </p>
+          </section>
+
+          <div class="actions">
+            <button id="submit-button" type="submit">Translate</button>
+            <button id="clear-button" class="ghost" type="button">Clear</button>
+            <button id="copy-button" class="ghost" type="button" disabled>Copy output</button>
+          </div>
+        </form>
+
+        <section class="result-card">
+          <div class="result-meta">
+            <strong>Result</strong>
+            <span id="status-text">Ready</span>
+          </div>
+          <pre id="result-output">Translation will appear here.</pre>
+          <p id="result-note" class="result-note">Request ID will appear here after a response.</p>
+          <p id="error-text" class="error" hidden></p>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

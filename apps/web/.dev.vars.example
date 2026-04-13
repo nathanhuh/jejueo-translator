@@ -1,0 +1,7 @@
+# Copy this file to .dev.vars for local Pages development.
+# Leave the Turnstile keys blank to keep the widget disabled locally.
+
+INFERENCE_BASE_URL=https://your-modal-endpoint.modal.run
+INFERENCE_AUTH_TOKEN=replace-me
+TURNSTILE_SECRET_KEY=
+TURNSTILE_SITE_KEY=
