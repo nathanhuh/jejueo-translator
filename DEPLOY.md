@@ -16,6 +16,7 @@ Already complete locally:
 - local Pages env template in `apps/web/.dev.vars.example`
 - Turnstile sitekey config endpoint plus browser token submission flow
 - inference deploy env template in `services/inference/.env.example`
+- inference deploy-readiness checker in `services/inference/scripts/check_modal_readiness.py`
 - deployed inference smoke-check script in `services/inference/scripts/smoke_check.py`
 - targeted Python and Node test coverage
 
@@ -63,11 +64,13 @@ Why it is external:
 
 How to resolve:
 
-1. Create or select the target Modal app and authenticate the local CLI.
-2. Install the server/runtime dependencies in the deployment environment.
-3. Upload or attach the chosen GGUF through a Modal Volume.
-4. Set environment variables and secret names to match `services/inference/src/jejueo_inference/settings.py`.
-5. Deploy the Modal app and verify:
+1. Copy `services/inference/.env.example` to `services/inference/.env` and replace placeholder values.
+2. Run `python services/inference/scripts/check_modal_readiness.py` to catch missing auth, model-path, or Modal CLI setup before deploy.
+3. Create or select the target Modal app and authenticate the local CLI.
+4. Install the server/runtime dependencies in the deployment environment.
+5. Upload or attach the chosen GGUF through a Modal Volume.
+6. Set environment variables and secret names to match `services/inference/src/jejueo_inference/settings.py`.
+7. Deploy the Modal app and verify:
    - `/health` returns `modelLoaded: true`
    - authenticated `/translate` succeeds
    - unauthenticated direct requests fail
@@ -265,11 +268,19 @@ If native/runtime or policy tuning issues appear:
 Use the checked-in helpers before or during live setup:
 
 1. Copy `apps/web/.dev.vars.example` to `apps/web/.dev.vars` for local Pages dev.
-2. Copy `services/inference/.env.example` into your preferred local secret source before running Modal deploys.
-3. After the Modal service is live, run:
+2. Copy `services/inference/.env.example` into `services/inference/.env` or your preferred local secret source.
+3. Before deploy, run:
 
 ```bash
-PYTHONPATH='packages/shared/src:services/inference/src' \
+python services/inference/scripts/check_modal_readiness.py
+```
+
+This should be clean except for intentional warnings like `MODAL_MIN_CONTAINERS=0`
+if you have not chosen a warm-container policy yet.
+
+4. After the Modal service is live, run:
+
+```bash
 python services/inference/scripts/smoke_check.py \
   --base-url 'https://<your-modal-endpoint>' \
   --auth-token '<your-inference-token>'

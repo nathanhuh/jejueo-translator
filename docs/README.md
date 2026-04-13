@@ -30,6 +30,7 @@ Current operating posture: ship a narrow, production-style portfolio demo first,
 - `llama-cpp-python` remains the intended service-side runtime target, but it is not the only documented local validation path.
 - `packages/shared` now contains the shared API contract and validation helpers.
 - `services/inference` now contains tested ASGI/FastAPI/Modal entry scaffolding, env-based model-volume path resolution, and structured request logging with forwarded request IDs.
+- `services/inference/scripts/check_modal_readiness.py` now gives a repo-local preflight check before live Modal deploys.
 - `apps/web` now contains a tested Pages Function proxy scaffold and a richer static UI shell for manual checks.
 - `apps/web` is now the single intended frontend surface for beta; older root/mock frontend artifacts have been removed.
 - The repo now includes a root Python dev dependency file plus CI for the shared/inference Python tests and the web test path.

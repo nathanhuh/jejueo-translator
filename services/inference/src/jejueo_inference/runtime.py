@@ -41,7 +41,13 @@ def create_modal_app(settings: InferenceSettings | None = None) -> Any:
     resolved_settings = settings or InferenceSettings.from_env()
     app = modal.App(resolved_settings.modal_app_name)
 
-    image = modal.Image.debian_slim(python_version="3.11").pip_install(
+    image = modal.Image.debian_slim(python_version="3.11")
+    if hasattr(image, "apt_install"):
+        image = image.apt_install(
+            "build-essential",
+            "cmake",
+        )
+    image = image.pip_install(
         "fastapi>=0.116.0",
         "uvicorn>=0.35.0",
         "modal>=1.0.0",
@@ -52,7 +58,7 @@ def create_modal_app(settings: InferenceSettings | None = None) -> Any:
         image = image.add_local_python_source("jejueo_inference", "jejueo_shared")
 
     function_kwargs: dict[str, Any] = {"image": image}
-    if resolved_settings.model_volume_name:
+    if resolved_settings.uses_model_volume and resolved_settings.model_volume_name:
         volume = modal.Volume.from_name(
             resolved_settings.model_volume_name,
             create_if_missing=False,
