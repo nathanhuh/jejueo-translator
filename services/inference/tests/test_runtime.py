@@ -42,8 +42,13 @@ class FakeModalApp:
 
 class FakeImage:
     def __init__(self) -> None:
+        self.apt_packages: list[str] = []
         self.packages: list[str] = []
         self.sources: tuple[str, ...] = ()
+
+    def apt_install(self, *packages: str) -> "FakeImage":
+        self.apt_packages.extend(packages)
+        return self
 
     def pip_install(self, *packages: str) -> "FakeImage":
         self.packages.extend(packages)
@@ -170,5 +175,24 @@ def test_create_modal_app_configures_image_volume_and_secret(monkeypatch) -> Non
     assert app.function_kwargs["min_containers"] == 1
     assert app.function_kwargs["scaledown_window"] == 300
     image = app.function_kwargs["image"]
+    assert "build-essential" in image.apt_packages
+    assert "cmake" in image.apt_packages
     assert "fastapi>=0.116.0" in image.packages
     assert image.sources == ("jejueo_inference", "jejueo_shared")
+
+
+def test_create_modal_app_skips_volume_when_model_path_is_explicit(monkeypatch) -> None:
+    fake_apps: list[FakeModalApp] = []
+    install_fake_modal(monkeypatch, fake_apps)
+
+    create_modal_app(
+        InferenceSettings(
+            model_path="/models/alan.gguf",
+            model_filename="ignored.gguf",
+            model_volume_name="jejueo-models",
+        )
+    )
+
+    app = fake_apps[0]
+    assert app.function_kwargs is not None
+    assert "volumes" not in app.function_kwargs

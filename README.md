@@ -87,7 +87,12 @@ Deployment prep:
 ```bash
 cp apps/web/.dev.vars.example apps/web/.dev.vars
 cp services/inference/.env.example services/inference/.env
+python services/inference/scripts/check_modal_readiness.py --allow-missing-modal-cli
 ```
+
+The readiness checker validates that the inference env has a real auth token, a usable
+model source (`MODEL_PATH` or `MODEL_FILENAME` + Volume settings), and a sane Modal
+deploy posture before you start the live Modal steps.
 
 ## Key Docs
 

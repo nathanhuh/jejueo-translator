@@ -55,6 +55,7 @@ Current note:
 
 - The repo now has tested ASGI, FastAPI, and Modal entry scaffolding with request IDs, upstream auth checks, and a lazy `llama-cpp-python` translator adapter.
 - Model-path resolution now supports either `MODEL_PATH` or `MODEL_VOLUME_MOUNT_PATH` + `MODEL_FILENAME`.
+- The Modal image now preinstalls `build-essential` and `cmake`, and the repo includes `services/inference/scripts/check_modal_readiness.py` for pre-deploy env validation.
 - A dependency-backed runtime verification still needs FastAPI, Modal, and `llama-cpp-python` installed in the target environment.
 
 ## 4) Edge Proxy (`apps/web` Pages Function)
